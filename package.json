@@ -1,0 +1,24 @@
+{
+  "name": "dynamic-brush",
+  "version": "1.0.0",
+  "description": "",
+  "main": "complete.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GZMKII/dynamic-brush.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GZMKII/dynamic-brush/issues"
+  },
+  "homepage": "https://github.com/GZMKII/dynamic-brush#readme",
+  "dependencies": {
+    "ccapture-fixed-2.js": "^1.0.9",
+    "p5.webm-capture": "^1.0.1"
+  }
+}

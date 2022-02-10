@@ -1,93 +1,139 @@
-////////////////////////////////////////////
-//Global Variable
-////////////////////////////////////////////
-var objs = [];
-var btns = [];
-var FPS = 60;
-var timepast = 0;
-var R = 200;
-var G = 150;
-var B = 50;
-var bR = 0;
-var bG = 0;
-var bB = 50;
-var eraserRange = 20;
-var timerRange = 50;
-var brushType = "CIRCLE";
-var pbrushType = "CIRCLE";
-var isPlaying = true;
-var isMenuHide = false;
+let objs = []
+let timepast = 0
+let brushSize = 40
+let f = false
+let spring = 0.4
+let friction = 0.45
+let v = 0.5
+let r = 0
+let vx = 0
+let vy = 0
+let splitNum = 10
+let diff = 8
+let size = 15
+let opacity = 255
+
+// var luzhi =  document.getElementById('start-capturing-button')
 
 
-////////////////////////////////////////////////////////////////////////
-//Node
-////////////////////////////////////////////////////////////////////////
-//画笔节点
-function Node(position, givenSize, givenR, givenG, givenB) {
-    this.R = givenR;
-    this.G = givenG;
-    this.B = givenB;
-    this.position = createVector(position.x, position.y);
-    this.position.x += (random(20) - 10);
-    this.position.y += (random(20) - 10);
-    this.size = createVector(0, 0);
-    this.sizeScale = 0.5;
-    var randomSize = givenSize / 2 + random(10);
-    this.baseSize = createVector(randomSize, randomSize);
-    this.timepast = 0;
-    this.isPlaying = isPlaying;
-    this.rotateAngle = random(2 * PI);
-    this.shapeType = brushType;
-    this.pmouseX = pmouseX;
-    this.pmouseY = pmouseY;
-    this.mouseX = mouseX;
-    this.mouseY = mouseY;
+
+// var baocun = document.getElementById('download-video-button')
+// baocun.addEventListener('click', function() {
+//     capturer.stop()
+//     capturer.save()
+// })
+// let capturer = new CCapture({
+//     format: 'webm',
+//     framerate: 30,
+// })
+
+
+
+
+// luzhi.addEventListener('click', function(){
+
+// 	capturer.start()
+// })
+
+
+//创建node
+function Noodle(x, y, oldX, oldY, oldR, opacity) {
+    // this.position = createVector(position.x, position.y)
+    this.x = x
+    this.y = y
+    this.oldX = oldX
+    this.oldY = oldY
+    this.r = oldR
+    this.timepast = 0
+    this.opacity = opacity
 }
 
-
-//drawing方法用来画下节点
-Node.prototype.drawing = function() {
-    //圆形画笔
-    translate(this.position.x, this.position.y);
-    fill(this.size.x * this.R / 10, this.size.x * this.G / 10, this.size.x * this.B / 10, round(sin(this.timepast) * 128));
-    ellipse(sin(this.timepast) * this.baseSize.x, cos(this.timepast) * this.baseSize.y, this.size.x * 1.25, this.size.y * 1.25);
-    fill(this.size.x * this.R / 10, this.size.x * this.G / 10, this.size.x * this.B / 10, 255);
-    ellipse(sin(this.timepast) * this.baseSize.x, cos(this.timepast) * this.baseSize.y, this.size.x, this.size.y);
-    resetMatrix();
+//绘画方法
+Noodle.prototype.drawing = function() {
+    stroke(245, 245, 125, this.opacity)
+    strokeWeight(this.r)
+    line(this.x, this.y, this.oldX, this.oldY)
+        // resetMatrix();
 }
 
-//update方法用来更新
-Node.prototype.update = function() {
-    this.size = createVector(this.baseSize.x + sin(this.timepast) * this.baseSize.x * this.sizeScale,
-        this.baseSize.y + sin(this.timepast) * this.baseSize.y * this.sizeScale);
-    if (this.isPlaying) {
-        this.timepast += 1 / FPS;
-    }
+//更新node
+Noodle.prototype.update = function() {
+    // this.r = this.r + sin(this.timepast)
+    this.opacity = sin(this.timepast) * 200 + 100
+    this.timepast += 0.03
+        // console.log(this.opacity)
 }
 
 function setup() {
-    frameRate(FPS)
-    createCanvas(600, 600)
+    frameRate(60)
+    let cnv = createCanvas(windowWidth, windowHeight)
+    cnv.id('huabu')
+    let x = y = oldX = oldY = 0
+    enableCapture({
+        frameCount: 360,
+        onComplete: function() { noLoop() }
+    });
+
 }
 
-function draw() {
-    background(bR, bG, bB);
-    noStroke()
-    timepast += 1 / FPS
 
-    //draw一些东西
+//画
+function draw() {
+    background(200, 12, 12, 255)
+        // debugger
+        // timepast += 1
+        // requestAnimationFrame(draw)
+        // debugger
+
+
+
     if (mouseIsPressed) {
-        var position = createVector(mouseX, mouseY)
-        objs.push(new Node(position, sqrt(sq(mouseX - pmouseX) + sq(mouseY - pmouseY)), R, G, B))
+        if (!f) {
+            f = true
+            x = mouseX
+            y = mouseY
+        }
+        vx += (mouseX - x) * spring
+        vy += (mouseY - y) * spring
+        vx *= friction
+        vy *= friction
+
+        v += sqrt(vx * vx + vy * vy) - v
+        v *= 0.6
+
+        oldR = r;
+        r = size - v
+
+        for (let i = 0; i < splitNum; ++i) {
+            oldX = x;
+            oldY = y;
+            x += vx / splitNum;
+            y += vy / splitNum;
+            oldR += (r - oldR) / splitNum;
+
+            if (oldR < 2) {
+                oldR = 2
+            }
+            objs.push(new Noodle(x, y, oldX, oldY, oldR))
+        }
+
+        // capturer.start();
+
+
+    } else if (f) {
+        ax = ay = 0
+        f = false
     }
 
-    for (var i = 0; i < objs.length; i++) {
+    //更新noodle
+    for (let i = 0; i < objs.length; i++) {
         objs[i].drawing()
         objs[i].update()
     }
 
-    //canvas
-    fill(R * 1.5, G * 1.5, B * 1.5);
-    stroke(R * 1.5, G * 1.5, B * 1.5);
-    ellipse(mouseX, mouseY, 10, 10);
+    // capturer.capture(canvas)
+    // document.getElementById('huaban')
+    // console.log(capturer.capture(canvas))
+    captureFrame()
+
 }
