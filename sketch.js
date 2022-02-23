@@ -12,23 +12,23 @@ let splitNum = 10
 let diff = 8
 let size = 15
 let opacity = 255
+let toggle;
+
 
 // var luzhi =  document.getElementById('start-capturing-button')
 
 
 
-// var baocun = document.getElementById('download-video-button')
-// baocun.addEventListener('click', function() {
-//     capturer.stop()
-//     capturer.save()
-// })
-// let capturer = new CCapture({
-//     format: 'webm',
-//     framerate: 30,
-// })
-
-
-
+var baocun = document.getElementById('download-video-button')
+baocun.addEventListener('pointerdown', function() {
+    console.log(123)
+        //     capturer.stop()
+        //     capturer.save()
+        // })
+        // let capturer = new CCapture({
+        //     format: 'webm',
+        //     framerate: 30,
+})
 
 // luzhi.addEventListener('click', function(){
 
@@ -64,37 +64,68 @@ Noodle.prototype.update = function() {
         // console.log(this.opacity)
 }
 
+// let kanwasi
+
 function setup() {
     frameRate(60)
     let cnv = createCanvas(windowWidth, windowHeight)
+    cnv.parent(select('section.canvas'))
     cnv.id('huabu')
+    kanwasi = document.getElementById('huabu')
+        // console.log(`sss: ${kanwasi}`)
     let x = y = oldX = oldY = 0
-    enableCapture({
-        frameCount: 360,
-        onComplete: function() { noLoop() }
-    });
+        // enableCapture({
+        //     frameCount: 360,
+        //     onComplete: funct    ion() { noLoop() }
+        // });
+        // cnv.onClick = function() {
+        //     console.log(123)
+        // }
+    kanwasi.addEventListener("pointerdown", function() {
+        toggle = true
+    })
+
+    kanwasi.addEventListener("pointerup", function() {
+        toggle = false
+    })
 
 }
+
+// console.log(`bbs: ${kanwasi}`)
+// kanwasi.addEventListener("pointerdown", function() {
+//     console.log(123)
+// })
+
 
 
 //画
 function draw() {
-    background(200, 12, 12, 255)
+    frameRate(30)
+    background(52, 52, 52, 255)
         // debugger
         // timepast += 1
         // requestAnimationFrame(draw)
         // debugger
 
+    //获取cursor坐标
+    let getCursor = document.querySelectorAll('.touchfreecursor')[0]
+    let cursorX = getComputedStyle(getCursor, null).getPropertyValue("left")
+    let cursorY = getComputedStyle(getCursor, null).getPropertyValue("top")
+
+    //转换成数字
+    let cx = parseInt(cursorX, 10)
+    let cy = parseInt(cursorY, 10)
 
 
-    if (mouseIsPressed) {
+    console.log(toggle)
+    if (toggle) {
         if (!f) {
             f = true
-            x = mouseX
-            y = mouseY
+            x = cx
+            y = cy
         }
-        vx += (mouseX - x) * spring
-        vy += (mouseY - y) * spring
+        vx += (cx - x) * spring
+        vy += (cy - y) * spring
         vx *= friction
         vy *= friction
 
@@ -134,6 +165,6 @@ function draw() {
     // capturer.capture(canvas)
     // document.getElementById('huaban')
     // console.log(capturer.capture(canvas))
-    captureFrame()
+    // captureFrame()
 
 }
