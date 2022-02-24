@@ -50,7 +50,7 @@ function Noodle(x, y, oldX, oldY, oldR, opacity) {
 
 //绘画方法
 Noodle.prototype.drawing = function() {
-    stroke(245, 245, 125, this.opacity)
+    stroke(12, 12, 12, this.opacity)
     strokeWeight(this.r)
     line(this.x, this.y, this.oldX, this.oldY)
         // resetMatrix();
