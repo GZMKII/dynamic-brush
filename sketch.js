@@ -79,7 +79,7 @@ function setup() {
 
 //画
 function draw() {
-    background(200, 12, 12, 255)
+    background(181, 28, 28, 255)
         // debugger
         // timepast += 1
         // requestAnimationFrame(draw)
