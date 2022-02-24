@@ -12,9 +12,6 @@ let splitNum = 10
 let diff = 8
 let size = 15
 let opacity = 255
-let toggle;
-
-
 
 
 // 初始化录制
@@ -31,15 +28,10 @@ let options = {
     fps: 60,
 }
 
-
-
 let baocun = document.getElementById('download-video-button')
 baocun.addEventListener('click', function() {
     rec.stop();
-
 })
-
-
 
 //创建node
 function Noodle(x, y, oldX, oldY, oldR, opacity) {
@@ -65,7 +57,7 @@ Noodle.prototype.drawing = function() {
 Noodle.prototype.update = function() {
     // this.r = this.r + sin(this.timepast)
     this.opacity = sin(this.timepast) * 200 + 100
-    this.timepast += 0.01
+    this.timepast += 0.015
         // console.log(this.opacity)
 }
 
