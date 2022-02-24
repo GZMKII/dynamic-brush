@@ -65,6 +65,7 @@ Noodle.prototype.update = function() {
 
 function setup() {
     frameRate(60)
+    pixelDensity(1)
     let cnv = createCanvas(windowWidth, windowHeight)
     cnv.parent(select('section.canvas'))
     cnv.id('huabu')
